@@ -1,0 +1,2570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MANOJ KUMAR K — Full-Stack Developer & Data-Driven Builder</title>
+  <meta name="description" content="Netflix-inspired interactive portfolio of Manoj Kumar K — Full-Stack Software Developer specializing in MERN stack, PHP/MySQL, and Python Data Analytics." />
+  
+  <!-- Google Fonts: Bebas Neue (Netflix-style Display) & Inter (Clean UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       1. DESIGN TOKENS & RESET
+       ========================================================================== */
+    :root {
+      --bg-primary: #141414;
+      --bg-card: #181818;
+      --bg-card-hover: #222222;
+      --bg-modal: #181818;
+      --accent-red: #E50914;
+      --accent-red-hover: #f40612;
+      --text-primary: #FFFFFF;
+      --text-secondary: #B3B3B3;
+      --text-muted: #777777;
+      --border-subtle: rgba(255, 255, 255, 0.14);
+      --match-green: #46d369;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --nav-height: 68px;
+      --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent-red);
+      outline-offset: 3px;
+    }
+
+    /* ==========================================================================
+       2. PROFILE GATE ("WHO'S WATCHING?")
+       ========================================================================== */
+    #profile-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background-color: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      transition: opacity 0.55s ease, transform 0.55s ease, visibility 0.55s;
+    }
+
+    #profile-gate.hidden {
+      opacity: 0;
+      transform: scale(1.06);
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .gate-logo {
+      position: absolute;
+      top: 1.5rem;
+      left: 4%;
+      font-family: var(--font-display);
+      font-size: 2.1rem;
+      letter-spacing: 2px;
+      color: var(--accent-red);
+      user-select: none;
+    }
+
+    .gate-creator-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 0.35rem 1rem 0.35rem 0.4rem;
+      border-radius: 999px;
+      margin-bottom: 1.15rem;
+      font-size: 0.82rem;
+      color: #e5e5e5;
+    }
+
+    .gate-creator-pill img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 1.5px solid var(--accent-red);
+    }
+
+    .gate-title {
+      font-size: clamp(1.85rem, 4.5vw, 3.25rem);
+      font-weight: 500;
+      margin-bottom: 2.25rem;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+
+    .profile-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(1.25rem, 3.5vw, 2.75rem);
+      margin-bottom: 2.75rem;
+    }
+
+    .profile-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.85rem;
+      width: clamp(110px, 14vw, 156px);
+    }
+
+    .profile-avatar {
+      width: clamp(110px, 14vw, 156px);
+      height: clamp(110px, 14vw, 156px);
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      border: 3px solid transparent;
+      transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-recruiter {
+      background: linear-gradient(135deg, #0073e6 0%, #003d7a 100%);
+    }
+    .avatar-client {
+      background: linear-gradient(135deg, #e50914 0%, #830309 100%);
+    }
+    .avatar-collaborator {
+      background: linear-gradient(135deg, #e87c03 0%, #8a4800 100%);
+    }
+
+    .profile-avatar svg {
+      width: 66%;
+      height: 66%;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+    }
+
+    .profile-name {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      transition: color 0.22s ease;
+    }
+
+    .profile-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: -0.55rem;
+    }
+
+    .profile-card:hover .profile-avatar,
+    .profile-card:focus-visible .profile-avatar {
+      border-color: var(--text-primary);
+      transform: scale(1.05);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+    }
+
+    .profile-card:hover .profile-name,
+    .profile-card:focus-visible .profile-name {
+      color: var(--text-primary);
+    }
+
+    .gate-badge {
+      border: 1px solid var(--text-muted);
+      color: var(--text-secondary);
+      padding: 0.55rem 1.5rem;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* ==========================================================================
+       3. TOP NAVIGATION BAR
+       ========================================================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      padding: 0 4%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.86) 10%, rgba(0, 0, 0, 0));
+      transition: background-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .navbar.scrolled {
+      background-color: #0b0b0b;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.75);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 2.25rem;
+    }
+
+    .brand-logo {
+      font-family: var(--font-display);
+      font-size: 1.95rem;
+      letter-spacing: 2px;
+      color: var(--accent-red);
+      text-shadow: 0 2px 10px rgba(229, 9, 20, 0.35);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.35rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #e5e5e5;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .nav-photo-thumb {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid var(--accent-red);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-photo-thumb:hover {
+      transform: scale(1.08);
+    }
+
+    .active-profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.35rem 0.75rem 0.35rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background 0.2s ease;
+    }
+
+    .active-profile-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .mini-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.75rem;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      font-size: 1.4rem;
+      padding: 0.25rem 0.5rem;
+    }
+
+    /* ==========================================================================
+       4. HERO BILLBOARD (WITH INTEGRATED PORTRAIT SPOTLIGHT)
+       ========================================================================== */
+    .hero {
+      position: relative;
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2.5rem;
+      padding: calc(var(--nav-height) + 2rem) 4% 6.5rem;
+      overflow: hidden;
+    }
+
+    .hero-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-backdrop img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+      filter: brightness(0.42) contrast(1.08);
+      transform: scale(1.02);
+      animation: slowZoom 22s ease-in-out infinite alternate;
+    }
+
+    @keyframes slowZoom {
+      from { transform: scale(1.02); }
+      to { transform: scale(1.08); }
+    }
+
+    .hero-vignette-left {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(77deg, rgba(20, 20, 20, 0.96) 22%, rgba(20, 20, 20, 0.62) 60%, rgba(20, 20, 20, 0.35) 100%);
+    }
+
+    .hero-vignette-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 220px;
+      background: linear-gradient(to top, var(--bg-primary) 14%, rgba(20, 20, 20, 0) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 660px;
+      flex: 1;
+    }
+
+    /* Right-Side Portrait Spotlight Card */
+    .hero-portrait-stage {
+      position: relative;
+      z-index: 2;
+      flex-shrink: 0;
+      width: clamp(230px, 24vw, 330px);
+      aspect-ratio: 3 / 4;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(229, 9, 20, 0.25);
+      background: #1b1b1b;
+      transition: transform 0.35s var(--transition-smooth), box-shadow 0.35s ease;
+    }
+
+    .hero-portrait-stage:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.95), 0 0 25px rgba(229, 9, 20, 0.35);
+    }
+
+    .hero-portrait-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: contrast(1.04) brightness(0.96);
+    }
+
+    .hero-portrait-fade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(20, 20, 20, 0.92) 0%,
+        rgba(20, 20, 20, 0.25) 35%,
+        rgba(20, 20, 20, 0) 65%
+      );
+      pointer-events: none;
+    }
+
+    .hero-portrait-caption {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      color: #fff;
+    }
+
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(20, 20, 20, 0.8);
+      border: 1px solid rgba(70, 211, 105, 0.45);
+      color: var(--match-green);
+      padding: 0.22rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+    }
+
+    .live-dot::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--match-green);
+      box-shadow: 0 0 8px var(--match-green);
+    }
+
+    .hero-n-series {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #e5e5e5;
+    }
+
+    .n-badge {
+      background-color: var(--accent-red);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      padding: 0 0.42rem;
+      line-height: 1.25;
+      border-radius: 2px;
+      letter-spacing: 1px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.3rem, 7vw, 5.6rem);
+      line-height: 0.95;
+      letter-spacing: 2px;
+      margin-bottom: 0.85rem;
+      text-shadow: 2px 4px 18px rgba(0, 0, 0, 0.8);
+    }
+
+    .hero-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .meta-match {
+      color: var(--match-green);
+      font-weight: 700;
+    }
+
+    .meta-box {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      padding: 0.05rem 0.4rem;
+      font-size: 0.75rem;
+      border-radius: 2px;
+      color: #e5e5e5;
+    }
+
+    .hero-tagline-pill {
+      display: inline-block;
+      background: rgba(229, 9, 20, 0.18);
+      border-left: 3px solid var(--accent-red);
+      padding: 0.35rem 0.8rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.9rem;
+    }
+
+    .hero-pitch {
+      font-size: clamp(0.98rem, 1.4vw, 1.1rem);
+      color: #e5e5e5;
+      line-height: 1.55;
+      margin-bottom: 1.65rem;
+      text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.85);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+
+    .btn-play {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      background-color: #FFFFFF;
+      color: #000000;
+      font-weight: 700;
+      font-size: 0.98rem;
+      padding: 0.72rem 1.55rem;
+      border-radius: 4px;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn-play:hover {
+      background-color: rgba(255, 255, 255, 0.82);
+      transform: scale(1.02);
+    }
+
+    .btn-download-resume {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background-color: var(--accent-red);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.98rem;
+      padding: 0.72rem 1.55rem;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(229, 9, 20, 0.4);
+      transition: background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn-download-resume:hover {
+      background-color: var(--accent-red-hover);
+      transform: scale(1.02);
+    }
+
+    .btn-info {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      background-color: rgba(109, 109, 110, 0.72);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.98rem;
+      padding: 0.72rem 1.55rem;
+      border-radius: 4px;
+      backdrop-filter: blur(4px);
+      transition: background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn-info:hover {
+      background-color: rgba(109, 109, 110, 0.45);
+      transform: scale(1.02);
+    }
+
+    /* ==========================================================================
+       5. CONTENT ROWS & HORIZONTAL CAROUSELS
+       ========================================================================== */
+    .main-rows {
+      position: relative;
+      z-index: 5;
+      margin-top: -3.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.75rem;
+      padding-bottom: 4rem;
+    }
+
+    .content-row {
+      position: relative;
+      padding: 0 4%;
+    }
+
+    .row-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+    }
+
+    .row-title {
+      font-size: clamp(1.15rem, 1.8vw, 1.48rem);
+      font-weight: 700;
+      color: #e5e5e5;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .row-explore {
+      font-size: 0.8rem;
+      color: #54b9c5;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .content-row:hover .row-explore {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .carousel-wrapper {
+      position: relative;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      padding: 0.75rem 0 1.25rem;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 0.75rem;
+      bottom: 1.25rem;
+      width: 46px;
+      background: rgba(20, 20, 20, 0.72);
+      color: #fff;
+      font-size: 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      opacity: 0;
+      transition: opacity 0.25s ease, background 0.2s ease, transform 0.2s ease;
+      border-radius: 4px;
+    }
+
+    .carousel-wrapper:hover .carousel-arrow,
+    .carousel-arrow:focus-visible {
+      opacity: 1;
+    }
+
+    .carousel-arrow:hover {
+      background: rgba(20, 20, 20, 0.92);
+      color: var(--accent-red);
+    }
+
+    .carousel-arrow.prev {
+      left: -12px;
+    }
+
+    .carousel-arrow.next {
+      right: -12px;
+    }
+
+    /* ==========================================================================
+       6. PROJECT & MILESTONE CARDS WITH NETFLIX HOVER EXPANSION
+       ========================================================================== */
+    .media-card {
+      flex: 0 0 clamp(245px, 22vw, 310px);
+      scroll-snap-align: start;
+      background-color: var(--bg-card);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: transform 0.32s var(--transition-smooth), box-shadow 0.32s ease, border-color 0.32s ease, z-index 0s;
+      cursor: pointer;
+    }
+
+    .media-card:hover,
+    .media-card:focus-within {
+      transform: scale(1.06) translateY(-6px);
+      z-index: 15;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.85);
+      border-color: rgba(255, 255, 255, 0.28);
+      background-color: var(--bg-card-hover);
+    }
+
+    .card-thumb {
+      position: relative;
+      height: 158px;
+      overflow: hidden;
+      background: #101010;
+    }
+
+    .card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.45s ease;
+    }
+
+    .media-card:hover .card-thumb img {
+      transform: scale(1.08);
+    }
+
+    .card-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(24, 24, 24, 0.98) 4%, rgba(24, 24, 24, 0.15) 60%, rgba(0, 0, 0, 0.35) 100%);
+    }
+
+    .card-top-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--accent-red);
+      color: #fff;
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .card-title-overlay {
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+      right: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.25;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+    }
+
+    .card-body {
+      padding: 0.85rem 0.95rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+
+    .card-match {
+      color: var(--match-green);
+    }
+
+    .card-year {
+      color: var(--text-secondary);
+    }
+
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.42;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .tag-pill {
+      font-size: 0.68rem;
+      color: #dcdcdc;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.16rem 0.48rem;
+      border-radius: 3px;
+    }
+
+    .card-hover-cta {
+      margin-top: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 0.55rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      opacity: 0.85;
+      transition: opacity 0.2s ease;
+    }
+
+    .media-card:hover .card-hover-cta {
+      opacity: 1;
+    }
+
+    .btn-view-project {
+      background-color: #fff;
+      color: #000;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 0.36rem 0.85rem;
+      border-radius: 3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: background 0.2s ease;
+    }
+
+    .btn-view-project:hover {
+      background-color: var(--accent-red);
+      color: #fff;
+    }
+
+    .btn-circle-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.5);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-circle-icon:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ==========================================================================
+       7. CONTINUE WATCHING (PROGRESS BARS)
+       ========================================================================== */
+    .progress-wrapper {
+      margin-top: 0.15rem;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.3rem;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--accent-red);
+      border-radius: 2px;
+    }
+
+    /* ==========================================================================
+       8. TOP 10 SKILLS (OUTLINED GIANT NUMBERS 1-10)
+       ========================================================================== */
+    .top10-card {
+      flex: 0 0 clamp(235px, 21vw, 285px);
+      scroll-snap-align: start;
+      display: flex;
+      align-items: center;
+      position: relative;
+      height: 175px;
+      cursor: pointer;
+      transition: transform 0.3s var(--transition-smooth);
+    }
+
+    .top10-card:hover {
+      transform: scale(1.06);
+      z-index: 12;
+    }
+
+    .top10-rank {
+      font-family: var(--font-display);
+      font-size: 10.5rem;
+      line-height: 0.82;
+      font-weight: 900;
+      color: #141414;
+      -webkit-text-stroke: 3.5px #595959;
+      user-select: none;
+      flex-shrink: 0;
+      width: 92px;
+      text-align: right;
+      margin-right: -14px;
+      z-index: 1;
+      transition: -webkit-text-stroke-color 0.25s ease;
+    }
+
+    .top10-card:hover .top10-rank {
+      -webkit-text-stroke-color: var(--accent-red);
+    }
+
+    .top10-poster {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      height: 158px;
+      background: linear-gradient(155deg, #232323 0%, #151515 100%);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 6px;
+      padding: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -8px 6px 20px rgba(0, 0, 0, 0.75);
+    }
+
+    .top10-card:hover .top10-poster {
+      border-color: var(--accent-red);
+    }
+
+    .skill-cat {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-red);
+      font-weight: 700;
+    }
+
+    .skill-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .skill-sub {
+      font-size: 0.73rem;
+      color: var(--text-secondary);
+      line-height: 1.35;
+    }
+
+    /* ==========================================================================
+       9. CRITICS' REVIEWS (TESTIMONIALS & HIGHLIGHTS)
+       ========================================================================== */
+    .review-card {
+      flex: 0 0 clamp(280px, 27vw, 360px);
+      scroll-snap-align: start;
+      background: linear-gradient(145deg, #1d1d1d 0%, #161616 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.85rem;
+      transition: transform 0.28s ease, border-color 0.28s ease;
+    }
+
+    .review-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(229, 9, 20, 0.55);
+    }
+
+    .review-stars {
+      color: #f5c518;
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+    }
+
+    .review-quote {
+      font-size: 0.88rem;
+      color: #e5e5e5;
+      font-style: italic;
+      line-height: 1.55;
+    }
+
+    .review-author {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 0.75rem;
+    }
+
+    .author-name {
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .author-role {
+      font-size: 0.74rem;
+      color: var(--text-secondary);
+    }
+
+    .certified-fresh {
+      background: rgba(70, 211, 105, 0.14);
+      color: var(--match-green);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+    }
+
+    /* ==========================================================================
+       10. NETFLIX DETAIL MODAL
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2.5rem 1rem;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.28s ease, visibility 0.28s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-dialog {
+      background-color: var(--bg-modal);
+      width: 100%;
+      max-width: 820px;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      transform: scale(0.94) translateY(18px);
+      transition: transform 0.3s var(--transition-smooth);
+    }
+
+    .modal-backdrop.open .modal-dialog {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 20;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #181818;
+      color: #fff;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: var(--accent-red);
+      transform: rotate(90deg);
+    }
+
+    .modal-banner {
+      position: relative;
+      height: 310px;
+      background: #0e0e0e;
+    }
+
+    .modal-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+    }
+
+    .modal-banner-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--bg-modal) 6%, rgba(24, 24, 24, 0.35) 55%, rgba(0, 0, 0, 0.3) 100%);
+    }
+
+    .modal-banner-content {
+      position: absolute;
+      bottom: 20px;
+      left: 28px;
+      right: 28px;
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 0.85rem;
+    }
+
+    .modal-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .modal-body {
+      padding: 1.25rem 28px 2rem;
+      display: grid;
+      grid-template-columns: 1.65fr 1fr;
+      gap: 1.75rem;
+    }
+
+    .modal-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.9rem;
+    }
+
+    .modal-desc {
+      font-size: 0.94rem;
+      color: #e5e5e5;
+      line-height: 1.65;
+      margin-bottom: 1.15rem;
+    }
+
+    .modal-results-box {
+      background: rgba(70, 211, 105, 0.08);
+      border-left: 3px solid var(--match-green);
+      padding: 0.85rem 1rem;
+      border-radius: 4px;
+      margin-bottom: 1.25rem;
+    }
+
+    .modal-results-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--match-green);
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .modal-results-list {
+      padding-left: 1.1rem;
+      font-size: 0.86rem;
+      color: #e5e5e5;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .modal-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      font-size: 0.84rem;
+    }
+
+    .sidebar-label {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .sidebar-value {
+      color: #e5e5e5;
+      margin-top: 0.2rem;
+      line-height: 1.45;
+    }
+
+    .modal-gallery {
+      grid-column: 1 / -1;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.15rem;
+    }
+
+    .gallery-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.85rem;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    /* ==========================================================================
+       11. CONTACT CTA BANNER & NETFLIX FOOTER
+       ========================================================================== */
+    .contact-cta-section {
+      margin: 1rem 4% 3.5rem;
+      padding: clamp(2rem, 4vw, 3.25rem);
+      border-radius: 8px;
+      background: radial-gradient(circle at top right, rgba(229, 9, 20, 0.28), rgba(20, 20, 20, 0.95) 65%), #181818;
+      border: 1px solid rgba(229, 9, 20, 0.35);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .cta-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.85rem);
+      letter-spacing: 1px;
+      line-height: 1.05;
+      margin-bottom: 0.45rem;
+    }
+
+    .cta-sub {
+      color: var(--text-secondary);
+      font-size: 0.96rem;
+      max-width: 560px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+
+    .btn-red-cta {
+      background-color: var(--accent-red);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.96rem;
+      padding: 0.82rem 1.65rem;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn-red-cta:hover {
+      background-color: var(--accent-red-hover);
+      transform: translateY(-2px);
+    }
+
+    .netflix-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 3rem 4% 3.5rem;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+    }
+
+    .footer-inner {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .footer-call {
+      margin-bottom: 1.5rem;
+      font-size: 0.92rem;
+    }
+
+    .footer-call a {
+      text-decoration: underline;
+      color: var(--text-secondary);
+    }
+
+    .footer-call a:hover {
+      color: #fff;
+    }
+
+    .footer-links-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem 1.5rem;
+      list-style: none;
+      margin-bottom: 1.75rem;
+    }
+
+    .footer-links-grid a {
+      text-decoration: underline;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+
+    .footer-links-grid a:hover {
+      color: var(--text-secondary);
+    }
+
+    .footer-lang-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--text-muted);
+      padding: 0.45rem 0.9rem;
+      border-radius: 3px;
+      color: var(--text-secondary);
+      margin-bottom: 1.1rem;
+      font-size: 0.8rem;
+    }
+
+    .footer-copyright {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       12. RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @media (max-width: 920px) {
+      .hero {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        padding-top: calc(var(--nav-height) + 1.5rem);
+        min-height: auto;
+      }
+
+      .hero-portrait-stage {
+        width: 170px;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        border: 3px solid var(--accent-red);
+      }
+
+      .hero-portrait-caption {
+        display: none;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        background: #0b0b0b;
+        flex-direction: column;
+        padding: 1.25rem 4%;
+        gap: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .nav-links.mobile-open {
+        display: flex;
+      }
+
+      .mobile-menu-btn {
+        display: inline-block;
+      }
+
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-links-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .carousel-arrow {
+        display: none;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-links-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. PROFILE SCREEN ("WHO'S WATCHING?")
+       ======================================================================== -->
+  <section id="profile-gate" aria-label="Visitor Profile Selection">
+    <div class="gate-logo">MANOJ KUMAR K</div>
+
+    <div class="gate-creator-pill">
+      <img src="Manoj123.jpeg" alt="Manoj Kumar K portrait" />
+      <span>MANOJ KUMAR K • Portfolio</span>
+    </div>
+
+    <h1 class="gate-title">Who's watching?</h1>
+
+    <div class="profile-list" role="list">
+      <!-- Recruiter Profile -->
+      <button class="profile-card" onclick="selectProfile('recruiter')" aria-label="Enter as Recruiter">
+        <div class="profile-avatar avatar-recruiter">
+          <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <circle cx="33" cy="38" r="6.5" fill="#fff"/>
+            <circle cx="67" cy="38" r="6.5" fill="#fff"/>
+            <path d="M26 58 Q50 78 74 58" stroke="#fff" stroke-width="6.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="profile-name">Recruiter</span>
+        <span class="profile-sub">Hiring & Roles</span>
+      </button>
+
+      <!-- Client Profile -->
+      <button class="profile-card" onclick="selectProfile('client')" aria-label="Enter as Client">
+        <div class="profile-avatar avatar-client">
+          <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <circle cx="33" cy="38" r="6.5" fill="#fff"/>
+            <circle cx="67" cy="38" r="6.5" fill="#fff"/>
+            <path d="M25 56 Q50 80 75 56" stroke="#fff" stroke-width="6.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="profile-name">Client</span>
+        <span class="profile-sub">Web & Data Builds</span>
+      </button>
+
+      <!-- Collaborator Profile -->
+      <button class="profile-card" onclick="selectProfile('collaborator')" aria-label="Enter as Collaborator">
+        <div class="profile-avatar avatar-collaborator">
+          <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+            <circle cx="33" cy="38" r="6.5" fill="#fff"/>
+            <circle cx="67" cy="38" r="6.5" fill="#fff"/>
+            <path d="M28 58 Q50 75 72 58" stroke="#fff" stroke-width="6.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="profile-name">Collaborator</span>
+        <span class="profile-sub">Open Source & Dev</span>
+      </button>
+    </div>
+
+    <button class="gate-badge" onclick="selectProfile('recruiter')">ENTER PORTFOLIO</button>
+  </section>
+
+  <!-- ========================================================================
+       2. TOP NAVBAR
+       ======================================================================== -->
+  <header class="navbar" id="navbar">
+    <div class="nav-left">
+      <a href="#home" class="brand-logo" aria-label="Manoj Kumar K Home">MANOJ KUMAR K</a>
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <img
+        src="Manoj123.jpeg"
+        alt="Manoj Kumar K"
+        class="nav-photo-thumb"
+        onclick="openResumeSummaryModal()"
+        title="View Manoj's Resume Dossier"
+      />
+      <button class="active-profile-btn" onclick="openProfileGate()" title="Switch Visitor Profile">
+        <span class="mini-avatar avatar-recruiter" id="nav-mini-avatar">R</span>
+        <span id="nav-profile-label">Recruiter</span>
+        <span aria-hidden="true">▾</span>
+      </button>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle Menu" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       3. HERO BILLBOARD
+       ======================================================================== -->
+  <main id="home">
+    <section class="hero" aria-label="Featured Developer Spotlight">
+      <div class="hero-backdrop">
+        <img
+          src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1920&q=80"
+          alt="Full-stack code editor and dark workspace backdrop"
+        />
+        <div class="hero-vignette-left"></div>
+        <div class="hero-vignette-bottom"></div>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-n-series">
+          <span class="n-badge">M</span>
+          <span>ORIGINAL PORTFOLIO</span>
+        </div>
+
+        <h1 class="hero-title">MANOJ KUMAR K</h1>
+
+        <div class="hero-meta-row">
+          <span class="meta-match" id="hero-match">99% Match for Engineering Teams</span>
+          <span>2026</span>
+          <span class="meta-box">BCA 8.36 CGPA</span>
+          <span>MERN • PHP/MySQL • Python ML</span>
+          <span class="meta-box">BENGALURU</span>
+        </div>
+
+        <div class="hero-tagline-pill" id="hero-tagline">
+          Full-Stack Developer & Data-Driven Builder — Full-Stack Software Developer (MERN, PHP/MySQL & Python Analytics)
+        </div>
+
+        <p class="hero-pitch" id="hero-pitch">
+          Results-driven BCA graduate (8.36 CGPA) and Full-Stack Software Developer with MERN internship experience at Orvionar. Proven track record of shipping end-to-end applications featuring RESTful APIs, JWT authentication, relational database architecture, and Python machine learning workflows.
+        </p>
+
+        <!-- Primary Recruiter Action Buttons (Including Direct Resume Download) -->
+        <div class="hero-actions">
+          <button class="btn-play" onclick="openShowreelModal()">
+            <span aria-hidden="true">▶</span> Play Showreel
+          </button>
+          <a
+            href="ManojKumarK_Resume_1.pdf"
+            download="Manoj_Kumar_K_Resume.pdf"
+            class="btn-download-resume"
+            aria-label="Download Manoj Kumar K Resume PDF"
+          >
+            <span aria-hidden="true">⬇</span> Download Resume
+          </a>
+          <button class="btn-info" onclick="openResumeSummaryModal()">
+            <span aria-hidden="true">ⓘ</span> More Info
+          </button>
+        </div>
+      </div>
+
+      <!-- Featured Portrait Card -->
+      <div class="hero-portrait-stage" onclick="openResumeSummaryModal()" role="button" tabindex="0" aria-label="Manoj Kumar K Portrait — Click for Resume Dossier">
+        <img src="Manoj123.jpeg" alt="Manoj Kumar K — Full-Stack Software Developer" />
+        <div class="hero-portrait-fade"></div>
+        <div class="hero-portrait-caption">
+          <span>BENGALURU, IN</span>
+          <span class="live-dot">OPEN TO WORK</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. NETFLIX CONTENT ROWS
+         ====================================================================== -->
+    <div class="main-rows">
+
+      <!-- ROW 1: TRENDING NOW (6 BEST PROJECTS) -->
+      <section class="content-row" id="projects" aria-labelledby="row-trending-title">
+        <div class="row-header">
+          <h2 class="row-title" id="row-trending-title">Trending Now — Featured Projects</h2>
+          <span class="row-explore">Click any title for full case study ›</span>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-arrow prev" onclick="scrollCarousel('track-trending', -1)" aria-label="Scroll left">‹</button>
+          <div class="carousel-track" id="track-trending"></div>
+          <button class="carousel-arrow next" onclick="scrollCarousel('track-trending', 1)" aria-label="Scroll right">›</button>
+        </div>
+      </section>
+
+      <!-- ROW 2: CONTINUE WATCHING -->
+      <section class="content-row" aria-labelledby="row-continue-title">
+        <div class="row-header">
+          <h2 class="row-title" id="row-continue-title">Continue Watching for <span id="continue-visitor-name">Recruiter</span></h2>
+          <span class="row-explore">Active builds & learning tracks ›</span>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-arrow prev" onclick="scrollCarousel('track-continue', -1)" aria-label="Scroll left">‹</button>
+          <div class="carousel-track" id="track-continue"></div>
+          <button class="carousel-arrow next" onclick="scrollCarousel('track-continue', 1)" aria-label="Scroll right">›</button>
+        </div>
+      </section>
+
+      <!-- ROW 3: TOP 10 SKILLS -->
+      <section class="content-row" id="skills" aria-labelledby="row-skills-title">
+        <div class="row-header">
+          <h2 class="row-title" id="row-skills-title">Top 10 Skills in Bengaluru Today</h2>
+          <span class="row-explore">Full-Stack & Data Stack ›</span>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-arrow prev" onclick="scrollCarousel('track-skills', -1)" aria-label="Scroll left">‹</button>
+          <div class="carousel-track" id="track-skills"></div>
+          <button class="carousel-arrow next" onclick="scrollCarousel('track-skills', 1)" aria-label="Scroll right">›</button>
+        </div>
+      </section>
+
+      <!-- ROW 4: INTERNSHIP IMPACT & WINS -->
+      <section class="content-row" id="experience" aria-labelledby="row-wins-title">
+        <div class="row-header">
+          <h2 class="row-title" id="row-wins-title">Internship Impact & Engineering Wins</h2>
+          <span class="row-explore">Verified deliverables & metrics ›</span>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-arrow prev" onclick="scrollCarousel('track-wins', -1)" aria-label="Scroll left">‹</button>
+          <div class="carousel-track" id="track-wins"></div>
+          <button class="carousel-arrow next" onclick="scrollCarousel('track-wins', 1)" aria-label="Scroll right">›</button>
+        </div>
+      </section>
+
+      <!-- ROW 5: BEHIND THE SCENES -->
+      <section class="content-row" aria-labelledby="row-bts-title">
+        <div class="row-header">
+          <h2 class="row-title" id="row-bts-title">Behind The Scenes — Education, Story & Tooling</h2>
+          <span class="row-explore">Academic & developer journey ›</span>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-arrow prev" onclick="scrollCarousel('track-bts', -1)" aria-label="Scroll left">‹</button>
+          <div class="carousel-track" id="track-bts"></div>
+          <button class="carousel-arrow next" onclick="scrollCarousel('track-bts', 1)" aria-label="Scroll right">›</button>
+        </div>
+      </section>
+
+      <!-- ROW 6: CRITICS' REVIEWS -->
+      <section class="content-row" aria-labelledby="row-reviews-title">
+        <div class="row-header">
+          <h2 class="row-title" id="row-reviews-title">Critics' Reviews & Engineering Endorsements</h2>
+          <span class="row-explore">5.0 ★ Rated Execution</span>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-arrow prev" onclick="scrollCarousel('track-reviews', -1)" aria-label="Scroll left">‹</button>
+          <div class="carousel-track" id="track-reviews"></div>
+          <button class="carousel-arrow next" onclick="scrollCarousel('track-reviews', 1)" aria-label="Scroll right">›</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ======================================================================
+         5. CONTACT CALL-TO-ACTION BANNER (WITH RESUME DOWNLOAD)
+         ====================================================================== -->
+    <section class="contact-cta-section" id="contact" aria-labelledby="cta-title">
+      <div>
+        <h2 class="cta-heading" id="cta-title">Ready to start a new season? Let's talk.</h2>
+        <p class="cta-sub">
+          Available for Full-Stack Software Developer, MERN Stack, Backend API, and Data Analyst opportunities in Bengaluru or remote. Download my resume or reach out directly.
+        </p>
+      </div>
+      <div class="cta-buttons">
+        <a
+          href="ManojKumarK_Resume_1.pdf"
+          download="Manoj_Kumar_K_Resume.pdf"
+          class="btn-red-cta"
+        >
+          ⬇ Download Resume (PDF)
+        </a>
+        <a href="mailto:manojkumark654007@gmail.com?subject=Opportunity%20for%20Manoj%20Kumar%20K" class="btn-info">
+          ✉ Email Manoj
+        </a>
+        <a href="https://www.linkedin.com/in/manojkumark654007" target="_blank" rel="noopener noreferrer" class="btn-info">
+          in LinkedIn
+        </a>
+        <a href="https://github.com/ManojKumark-creator" target="_blank" rel="noopener noreferrer" class="btn-info">
+          ⌘ GitHub
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       6. NETFLIX-STYLE FOOTER
+       ======================================================================== -->
+  <footer class="netflix-footer">
+    <div class="footer-inner">
+      <p class="footer-call">
+        Questions or hiring inquiries? Call <a href="tel:+917090077384">+91-7090077384</a> or write to
+        <a href="mailto:manojkumark654007@gmail.com">manojkumark654007@gmail.com</a>
+      </p>
+
+      <ul class="footer-links-grid">
+        <li><a href="ManojKumarK_Resume_1.pdf" download="Manoj_Kumar_K_Resume.pdf">Download Resume (PDF)</a></li>
+        <li><a href="https://www.linkedin.com/in/manojkumark654007" target="_blank" rel="noopener noreferrer">LinkedIn (/in/manojkumark654007)</a></li>
+        <li><a href="https://github.com/ManojKumark-creator" target="_blank" rel="noopener noreferrer">GitHub (ManojKumark-creator)</a></li>
+        <li><a href="https://instagram.com/manoj_manu1356" target="_blank" rel="noopener noreferrer">Instagram (@manoj_manu1356)</a></li>
+        <li><a href="#projects">Featured Projects</a></li>
+        <li><a href="#skills">Top 10 Tech Stack</a></li>
+        <li><a href="#experience">Orvionar Internship</a></li>
+        <li><a href="javascript:void(0)" onclick="openResumeSummaryModal()">Academic & Resume Summary</a></li>
+      </ul>
+
+      <div class="footer-lang-box">
+        <span aria-hidden="true">🌐</span> English • Bengaluru, Karnataka, India
+      </div>
+
+      <p class="footer-copyright">
+        © 2026 Manoj Kumar K — Full-Stack Developer & Data-Driven Builder. Designed with a Netflix-inspired UI.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       7. NETFLIX DETAIL MODAL
+       ======================================================================== -->
+  <div class="modal-backdrop" id="detail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="handleBackdropClick(event)">
+    <div class="modal-dialog">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close modal">✕</button>
+
+      <div class="modal-banner">
+        <img id="modal-img" src="" alt="" />
+        <div class="modal-banner-gradient"></div>
+        <div class="modal-banner-content">
+          <h2 class="modal-title" id="modal-title">Project Title</h2>
+          <div class="modal-cta-row">
+            <a id="modal-primary-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-play">
+              ▶ View on GitHub / Live
+            </a>
+            <a
+              href="ManojKumarK_Resume_1.pdf"
+              download="Manoj_Kumar_K_Resume.pdf"
+              class="btn-download-resume"
+            >
+              ⬇ Download Resume
+            </a>
+            <a href="mailto:manojkumark654007@gmail.com?subject=Project%20Inquiry%20-%20Manoj%20Kumar%20K" class="btn-info">
+              ✉ Contact
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div>
+          <div class="modal-meta">
+            <span class="meta-match" id="modal-match">98% Match</span>
+            <span id="modal-year">2026</span>
+            <span class="meta-box" id="modal-badge">FULL-STACK</span>
+          </div>
+
+          <p class="modal-desc" id="modal-desc"></p>
+
+          <div class="modal-results-box">
+            <div class="modal-results-title">Key Engineering Deliverables & Results</div>
+            <ul class="modal-results-list" id="modal-results"></ul>
+          </div>
+        </div>
+
+        <aside class="modal-sidebar">
+          <div>
+            <div class="sidebar-label">Tech Stack & Tools:</div>
+            <div class="sidebar-value" id="modal-stack"></div>
+          </div>
+          <div>
+            <div class="sidebar-label">Role & Context:</div>
+            <div class="sidebar-value" id="modal-role"></div>
+          </div>
+          <div>
+            <div class="sidebar-label">Category Tags:</div>
+            <div class="sidebar-value" id="modal-tags"></div>
+          </div>
+        </aside>
+
+        <div class="modal-gallery" id="modal-gallery-section">
+          <div class="gallery-title">Architecture & Interface Previews</div>
+          <div class="gallery-grid" id="modal-gallery"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       8. VANILLA JAVASCRIPT (DATA + INTERACTIVITY)
+       ======================================================================== -->
+  <script>
+    const VISITOR_PROFILES = {
+      recruiter: {
+        label: "Recruiter",
+        short: "R",
+        avatarClass: "avatar-recruiter",
+        match: "99% Match for Software Engineering Roles",
+        tagline: "Full-Stack Developer & Data-Driven Builder — Full-Stack Software Developer (MERN, PHP/MySQL & Python Analytics)",
+        pitch: "Results-driven BCA graduate (8.36 CGPA, Vijaya College) with hands-on MERN Full Stack internship experience at Orvionar. Proven track record shipping RESTful APIs, JWT authentication, normalized MySQL databases, and Python ML workflows."
+      },
+      client: {
+        label: "Client",
+        short: "C",
+        avatarClass: "avatar-client",
+        match: "98% Match for Custom Web & Analytics Builds",
+        tagline: "Full-Stack Developer & Data-Driven Builder — End-to-End Web Platforms & SQL/Python Dashboards",
+        pitch: "I turn business workflows into fast, secure web applications—from digital ordering and admin control panels (MUNCHMATE) to responsive React & Node.js platforms backed by clean relational or NoSQL databases."
+      },
+      collaborator: {
+        label: "Collaborator",
+        short: "D",
+        avatarClass: "avatar-collaborator",
+        match: "97% Match for Hackathons & Open-Source Builds",
+        tagline: "Full-Stack Developer & Data-Driven Builder — React, Node/Express, Python & Predictive ML",
+        pitch: "Passionate about clean modular architecture, Express middleware, Mongoose schemas, and Python data pipelines (Pandas, Scikit-Learn). Let's build scalable full-stack products together."
+      }
+    };
+
+    const TRENDING_PROJECTS = [
+      {
+        id: "munchmate",
+        title: "MUNCHMATE — Digital Canteen System",
+        badge: "FEATURED FULL-STACK",
+        match: "99% Match",
+        year: "2026",
+        role: "Lead Full-Stack Developer",
+        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80",
+        tags: ["PHP 8", "MySQL", "JavaScript", "HTML5/CSS3"],
+        shortDesc: "Full-stack digital canteen ordering and administrative platform streamlining menu management, cart workflows, and daily inventory tracking.",
+        fullDesc: "Developed a comprehensive digital canteen ordering and administrative management platform designed to eliminate queue bottlenecks and manual billing errors. Built normalized relational database schemas and an administrative control panel for real-time order fulfillment.",
+        results: [
+          "Engineered normalized MySQL schemas using PDO prepared statements, AUTO_INCREMENT, and foreign-key constraints to eliminate data orphans and prevent SQL injection.",
+          "Streamlined end-to-end customer menu browsing, dynamic cart workflows, and daily inventory tracking.",
+          "Built an administrative control panel enabling real-time order status updates and automated daily sales record tracking."
+        ],
+        stack: "HTML5, CSS3, PHP 8, PDO/MySQL, JavaScript (ES6+), XAMPP",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "mern-task-app",
+        title: "MERN Task Management Application",
+        badge: "MERN + JWT",
+        match: "98% Match",
+        year: "2026",
+        role: "Full-Stack Developer (Mini-Project)",
+        image: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&w=900&q=80",
+        tags: ["MongoDB", "Express.js", "React.js", "Node.js", "JWT"],
+        shortDesc: "Responsive full-stack CRUD task tracker with stateless JWT authentication, bcrypt hashing, and Mongoose schema validation.",
+        fullDesc: "Built a responsive full-stack CRUD task tracker using React.js and Node.js/Express.js supporting real-time task creation, multi-criteria filtering, and status lifecycle management with strict user-level data isolation.",
+        results: [
+          "Implemented stateless user authentication using JSON Web Tokens (JWT) and bcrypt password hashing to enforce strict per-user data isolation.",
+          "Modeled scalable NoSQL schemas using Mongoose with server-side validation rules to ensure data integrity prior to database persistence.",
+          "Delivered responsive React.js UI components with instant task filtering and status updates."
+        ],
+        stack: "MongoDB, Express.js, React.js, Node.js, JWT, bcrypt, Mongoose",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "orvionar-platform",
+        title: "Orvionar Full-Stack Web Modules",
+        badge: "INTERNSHIP PROD",
+        match: "99% Match",
+        year: "Jan–Apr 2026",
+        role: "MERN Full Stack Web Development Intern",
+        image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80",
+        tags: ["React.js", "Node.js", "REST APIs", "MongoDB"],
+        shortDesc: "Engineered and deployed responsive full-stack web features across a 13-week agile development cycle at Orvionar, Bengaluru.",
+        fullDesc: "During a 13-week agile internship at Orvionar in Bengaluru, engineered and integrated production-grade React.js interfaces with Node.js/Express backend services and MongoDB collections.",
+        results: [
+          "Built and integrated 10+ RESTful API endpoints connecting dynamic React front-end components with backend MongoDB databases.",
+          "Collaborated on reusable UI components and client-side state logic using modern JavaScript (ES6+), HTML5, and CSS3.",
+          "Delivered sprint features consistently across a structured 13-week agile development lifecycle."
+        ],
+        stack: "MongoDB, Express.js, React.js, Node.js, JavaScript (ES6+), HTML5, CSS3",
+        link: "https://www.linkedin.com/in/manojkumark654007",
+        screenshots: [
+          "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "express-middleware",
+        title: "Centralized Express.js API Middleware",
+        badge: "BACKEND ARCH",
+        match: "96% Match",
+        year: "2026",
+        role: "Backend Engineer",
+        image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=900&q=80",
+        tags: ["Node.js", "Express.js", "REST APIs", "Security"],
+        shortDesc: "Custom Express.js middleware layer for centralized request validation, structured error handling, and API request logging.",
+        fullDesc: "Architected reusable Express.js middleware pipelines to standardize incoming payload validation, centralize exception formatting, and capture request diagnostics across RESTful microservices.",
+        results: [
+          "Significantly reduced unhandled API exceptions by intercepting malformed requests prior to controller execution.",
+          "Standardized HTTP status codes and JSON error payloads for predictable front-end React consumption.",
+          "Improved debugging turnaround via structured request/response logging."
+        ],
+        stack: "Node.js, Express.js, JavaScript (ES6+), RESTful Architecture",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "python-ml-analytics",
+        title: "Predictive Analytics & ETL Workflow",
+        badge: "DATA & ML",
+        match: "95% Match",
+        year: "2025–2026",
+        role: "Data Analyst & Python Developer",
+        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80",
+        tags: ["Python", "Pandas", "Scikit-Learn", "Matplotlib"],
+        shortDesc: "End-to-end ETL data cleaning pipelines, statistical feature exploration, and supervised predictive modeling workflows.",
+        fullDesc: "Built structured Python data science workflows combining SQL data extraction, Pandas/NumPy transformation pipelines, Matplotlib visual diagnostics, and Scikit-Learn predictive models.",
+        results: [
+          "Automated raw dataset ingestion, null imputation, and feature encoding using modular Pandas and NumPy ETL scripts.",
+          "Trained and evaluated classification/regression models in Scikit-Learn to uncover actionable trends.",
+          "Visualized key distributions and model performance metrics with Matplotlib and MS Excel reporting."
+        ],
+        stack: "Python, Pandas, NumPy, Matplotlib, Scikit-Learn, SQL, MS Excel",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1543286386-713bdd548da4?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "relational-schema-engine",
+        title: "Relational Schema & PDO Security Suite",
+        badge: "DATABASE DESIGN",
+        match: "94% Match",
+        year: "2026",
+        role: "Database Architect",
+        image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=900&q=80",
+        tags: ["MySQL", "SQL", "PHP 8 PDO", "Normalization"],
+        shortDesc: "3NF relational database architecture featuring strict referential integrity, indexing, and parameterized query execution.",
+        fullDesc: "Designed normalized multi-table relational database architectures for transactional web applications, enforcing referential integrity and hardened query execution layers.",
+        results: [
+          "Eliminated orphaned records and update anomalies through 3NF table decomposition and cascading foreign-key constraints.",
+          "Hardened data access layers against SQL injection using parameterized PHP 8 PDO statements.",
+          "Optimized transactional reporting queries for daily sales and inventory reconciliation."
+        ],
+        stack: "MySQL, SQL, PHP 8 PDO, Relational Schema Design, XAMPP",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+        ]
+      }
+    ];
+
+    const CONTINUE_WATCHING = [
+      {
+        id: "cw-fullstack-scale",
+        title: "Scalable MERN Microservices & Auth",
+        badge: "IN PROGRESS",
+        match: "98% Match",
+        year: "2026",
+        progress: 82,
+        progressText: "82% Complete • Role-Based Access & Refresh Tokens",
+        role: "Full-Stack Developer",
+        image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=900&q=80",
+        tags: ["Node.js", "React.js", "JWT", "MongoDB"],
+        shortDesc: "Expanding JWT authentication patterns with refresh token rotation, role-based access control, and modular Express routers.",
+        fullDesc: "Building next-generation full-stack reference architectures incorporating refresh-token rotation, granular role-based access control (RBAC), and reusable React hooks.",
+        results: [
+          "Implementing multi-role authorization middleware on top of existing JWT & bcrypt foundations.",
+          "Designing clean API contracts and automated error boundaries in React.js."
+        ],
+        stack: "MongoDB, Express.js, React.js, Node.js, JWT, Git/GitHub",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "cw-ml-pipelines",
+        title: "End-to-End Predictive ML Pipelines",
+        badge: "ACTIVE LAB",
+        match: "96% Match",
+        year: "2026",
+        progress: 74,
+        progressText: "74% Complete • Feature Engineering & Model Tuning",
+        role: "Data Science & Analytics",
+        image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=900&q=80",
+        tags: ["Python", "Scikit-Learn", "Pandas", "ETL"],
+        shortDesc: "Refining supervised machine learning pipelines with automated ETL preprocessing and cross-validated hyperparameter tuning.",
+        fullDesc: "Advancing analytical workflows by pairing SQL aggregations with Python Scikit-Learn pipelines to deliver interpretable business forecasts.",
+        results: [
+          "Building reusable ETL cleaning modules in Pandas and NumPy.",
+          "Evaluating precision/recall tradeoffs across classification algorithms."
+        ],
+        stack: "Python, Pandas, NumPy, Scikit-Learn, Matplotlib, SQL",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1543286386-713bdd548da4?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "cw-bca-graduation",
+        title: "BCA Degree Completion (8.36 CGPA)",
+        badge: "Vijaya College",
+        match: "100% Match",
+        year: "2023–2026",
+        progress: 96,
+        progressText: "96% Complete • Vijaya College, Jayanagar",
+        role: "Bachelor of Computer Applications",
+        image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=80",
+        tags: ["BCA", "8.36 CGPA", "Computer Science", "Bengaluru"],
+        shortDesc: "Completing Bachelor of Computer Applications at Vijaya College, Jayanagar, Bengaluru with an 8.36 CGPA.",
+        fullDesc: "Strong academic foundation in data structures, relational database management systems, web technologies, Python, Java, C++, and software engineering at Vijaya College, Jayanagar, Bengaluru.",
+        results: [
+          "Maintained an 8.36 CGPA across core computer science and software development coursework.",
+          "Applied classroom database and programming concepts directly into production projects like MUNCHMATE."
+        ],
+        stack: "Python, Java, C++, C, SQL, Web Technologies, Software Engineering",
+        link: "https://www.linkedin.com/in/manojkumark654007",
+        screenshots: [
+          "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "cw-open-roles",
+        title: "Season 2026: Full-Time Engineering Role",
+        badge: "HIRING NOW",
+        match: "99% Match",
+        year: "2026",
+        progress: 90,
+        progressText: "Ready to Join • Bengaluru / Hybrid / Remote",
+        role: "Full-Stack / Backend / Data Analyst",
+        image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=900&q=80",
+        tags: ["Immediate Impact", "MERN", "SQL", "Python"],
+        shortDesc: "Actively interviewing for Full-Stack Developer, Junior Software Engineer, and Data Analyst positions in Bengaluru.",
+        fullDesc: "Equipped with real internship delivery experience at Orvionar, full-stack PHP/MySQL and MERN portfolio builds, and Python data analytics skills—ready to contribute from day one.",
+        results: [
+          "Hands-on experience shipping 10+ REST APIs and full-stack user interfaces.",
+          "Strong cross-functional foundation spanning front-end, back-end, relational SQL, and ML workflows."
+        ],
+        stack: "MERN Stack, PHP 8, MySQL, Python, SQL, Git/GitHub",
+        link: "mailto:manojkumark654007@gmail.com",
+        screenshots: [
+          "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80"
+        ]
+      }
+    ];
+
+    const TOP_10_SKILLS = [
+      { rank: 1, category: "Frontend & UI", name: "React.js & ES6+", sub: "Reusable components, client state, HTML5 & CSS3" },
+      { rank: 2, category: "Backend Runtime", name: "Node.js & Express.js", sub: "RESTful APIs, custom validation & error middleware" },
+      { rank: 3, category: "NoSQL Database", name: "MongoDB & Mongoose", sub: "Scalable schemas & server-side data validation" },
+      { rank: 4, category: "Relational DB", name: "MySQL & SQL", sub: "3NF schema design, foreign keys & query optimization" },
+      { rank: 5, category: "Server-Side Web", name: "PHP 8 & XAMPP", sub: "Secure PDO prepared statements & admin panels" },
+      { rank: 6, category: "API Security", name: "REST APIs & JWT", sub: "Stateless authentication & bcrypt password hashing" },
+      { rank: 7, category: "Core Language", name: "Python", sub: "Scripting, automation & data-driven software" },
+      { rank: 8, category: "Data Science", name: "Pandas, NumPy & ML", sub: "Scikit-Learn, Matplotlib & ETL pipelines" },
+      { rank: 9, category: "Polyglot Foundation", name: "Java, C++ & C", sub: "Object-oriented design & algorithmic problem solving" },
+      { rank: 10, category: "Dev Workflow", name: "Git, GitHub & Excel", sub: "Version control, VS Code, Android Studio & reporting" }
+    ];
+
+    const CLIENT_WINS = [
+      {
+        id: "win-apis",
+        title: "10+ Production REST APIs Integrated",
+        badge: "ORVIONAR INTERNSHIP",
+        match: "99% Match",
+        year: "2026",
+        role: "MERN Full Stack Intern",
+        image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=900&q=80",
+        tags: ["REST APIs", "React.js", "MongoDB"],
+        shortDesc: "Connected dynamic React front-end views with MongoDB persistence across 10+ endpoints during a 13-week agile cycle.",
+        fullDesc: "Engineered and integrated over 10 RESTful API endpoints at Orvionar, bridging interactive React.js client components with structured MongoDB collections.",
+        results: [
+          "Delivered 10+ tested REST endpoints within a 13-week agile sprint schedule.",
+          "Ensured seamless JSON data flow and responsive UI state synchronization."
+        ],
+        stack: "MongoDB, Express.js, React.js, Node.js",
+        link: "https://www.linkedin.com/in/manojkumark654007",
+        screenshots: [
+          "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "win-exceptions",
+        title: "Zero Unhandled API Exceptions",
+        badge: "RELIABILITY WIN",
+        match: "97% Match",
+        year: "2026",
+        role: "Backend Middleware Engineer",
+        image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=900&q=80",
+        tags: ["Express.js", "Validation", "Logging"],
+        shortDesc: "Custom Express.js middleware for centralized request validation, error handling, and logging reduced unhandled API exceptions.",
+        fullDesc: "Replaced scattered try/catch blocks with centralized Express.js validation, error-handling, and logging middleware to harden backend stability.",
+        results: [
+          "Reduced unhandled API exceptions across development and staging environments.",
+          "Standardized request audit logs for rapid root-cause diagnostics."
+        ],
+        stack: "Node.js, Express.js, JavaScript (ES6+)",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "win-zero-orphans",
+        title: "Zero Data Orphans & SQLi Hardening",
+        badge: "SECURITY & DATA",
+        match: "98% Match",
+        year: "2026",
+        role: "Database & PHP 8 Developer",
+        image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=900&q=80",
+        tags: ["MySQL", "PDO", "Foreign Keys"],
+        shortDesc: "Normalized relational schema with foreign-key constraints and PDO prepared queries eliminated data anomalies in MUNCHMATE.",
+        fullDesc: "Architected MUNCHMATE's relational database with strict foreign-key constraints, AUTO_INCREMENT primary keys, and parameterized PDO queries.",
+        results: [
+          "Eliminated orphaned order/menu records across administrative edits.",
+          "Protected user authentication and order submissions against SQL injection."
+        ],
+        stack: "PHP 8, PDO, MySQL, SQL",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "win-jwt-isolation",
+        title: "Stateless User Data Isolation",
+        badge: "AUTH ARCHITECTURE",
+        match: "96% Match",
+        year: "2026",
+        role: "Full-Stack Security Builder",
+        image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=900&q=80",
+        tags: ["JWT", "bcrypt", "Mongoose"],
+        shortDesc: "Enforced strict multi-user task isolation using signed JWT tokens, bcrypt hashing, and Mongoose schema rules.",
+        fullDesc: "Secured the MERN Task Management Application so every authenticated user can query, update, or delete strictly their own validated task documents.",
+        results: [
+          "Implemented salted bcrypt password hashing and stateless JWT route guards.",
+          "Enforced server-side Mongoose validation before persisting any document."
+        ],
+        stack: "JWT, bcrypt, Mongoose, Express.js, MongoDB",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
+        ]
+      }
+    ];
+
+    const BEHIND_THE_SCENES = [
+      {
+        id: "bts-vijaya-bca",
+        title: "Vijaya College, Jayanagar (BCA)",
+        badge: "EDUCATION • 8.36 CGPA",
+        match: "2023–2026",
+        year: "Bengaluru",
+        role: "Bachelor of Computer Applications",
+        image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=900&q=80",
+        tags: ["BCA", "8.36 CGPA", "Jayanagar"],
+        shortDesc: "Graduating with a Bachelor of Computer Applications (8.36 CGPA) from Vijaya College, Jayanagar, Bengaluru.",
+        fullDesc: "Completed comprehensive undergraduate training in computer applications at Vijaya College, Jayanagar, Bengaluru (2023–2026), achieving an 8.36 CGPA while building practical full-stack software projects.",
+        results: [
+          "8.36 CGPA across core computer science, DBMS, programming, and web development subjects.",
+          "Location: Jayanagar, Bengaluru, Karnataka."
+        ],
+        stack: "DBMS, Operating Systems, Data Structures, Python, Java, C++, Web Dev",
+        link: "https://www.linkedin.com/in/manojkumark654007",
+        screenshots: [
+          "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "bts-bes-pu",
+        title: "B.E.S. PU College — PCMB Foundation",
+        badge: "PRE-UNIVERSITY • 70%",
+        match: "2023",
+        year: "Bengaluru",
+        role: "Pre-University (PCMB)",
+        image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=900&q=80",
+        tags: ["PCMB", "70%", "Analytical Base"],
+        shortDesc: "Completed Pre-University education in Physics, Chemistry, Mathematics, and Biology (70%) at B.E.S. PU College, Bengaluru.",
+        fullDesc: "Built strong quantitative and mathematical problem-solving fundamentals through the PCMB stream at B.E.S. PU College, Bengaluru (Class of 2023, 70%), laying the analytical groundwork for programming and machine learning.",
+        results: [
+          "Graduated in 2023 with 70% in Physics, Chemistry, Mathematics & Biology.",
+          "Developed strong quantitative reasoning used in SQL analytics and Scikit-Learn modeling."
+        ],
+        stack: "Mathematics, Statistics, Analytical Problem Solving",
+        link: "https://www.linkedin.com/in/manojkumark654007",
+        screenshots: [
+          "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1543286386-713bdd548da4?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "bts-dev-stack",
+        title: "Daily Engineering Toolkit & Process",
+        badge: "WORKFLOW",
+        match: "99% Match",
+        year: "2026",
+        role: "Agile Builder Mindset",
+        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
+        tags: ["VS Code", "Git/GitHub", "XAMPP", "Android Studio"],
+        shortDesc: "Schema-first database design, modular API engineering, Git version control, and iterative agile delivery.",
+        fullDesc: "Every project starts with clean data modeling—whether 3NF relational tables in MySQL or Mongoose schemas in MongoDB—followed by modular REST APIs, centralized error handling, and responsive UI assembly in VS Code.",
+        results: [
+          "Proficient across VS Code, Git, GitHub, XAMPP, and Android Studio.",
+          "Experienced working inside structured 13-week agile development cycles."
+        ],
+        stack: "Git, GitHub, VS Code, XAMPP, Android Studio, MS Excel",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&w=800&q=80"
+        ]
+      },
+      {
+        id: "bts-hybrid-edge",
+        title: "The Full-Stack + Data Analytics Edge",
+        badge: "UNIQUE VALUE",
+        match: "98% Match",
+        year: "2026",
+        role: "Hybrid Software & Data Builder",
+        image: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=900&q=80",
+        tags: ["MERN + PHP", "SQL", "Python ML"],
+        shortDesc: "Bridging application engineering (React, Node, PHP) with analytical intelligence (SQL, Pandas, Scikit-Learn).",
+        fullDesc: "Unlike purely front-end or purely reporting profiles, Manoj combines production web application engineering with relational SQL mastery and Python predictive workflows—building software that captures, validates, and analyzes data end-to-end.",
+        results: [
+          "Capable of owning database schema, REST API, UI, and downstream Python analytics.",
+          "Adaptable across JavaScript/Node, PHP 8/MySQL, and Python ecosystems."
+        ],
+        stack: "MERN Stack, PHP 8, MySQL, Python, Pandas, Scikit-Learn",
+        link: "https://www.linkedin.com/in/manojkumark654007",
+        screenshots: [
+          "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+        ]
+      }
+    ];
+
+    const CRITICS_REVIEWS = [
+      {
+        stars: "★★★★★",
+        quote: "Delivered 10+ RESTful API endpoints and custom Express validation middleware across a 13-week agile cycle, noticeably cutting down unhandled exceptions.",
+        author: "Orvionar Engineering Sprint",
+        role: "MERN Full Stack Internship Review • Bengaluru",
+        badge: "VERIFIED DELIVERY"
+      },
+      {
+        stars: "★★★★★",
+        quote: "MUNCHMATE stands out for its disciplined 3NF MySQL schema, PDO SQL-injection protection, and real-time administrative order tracking panel.",
+        author: "Full-Stack Architecture Review",
+        role: "PHP 8 & MySQL System Evaluation",
+        badge: "99% FRESH"
+      },
+      {
+        stars: "★★★★★",
+        quote: "Strong command of stateless JWT authentication, bcrypt hashing, and Mongoose validation rules—ensuring clean multi-user data isolation from day one.",
+        author: "MERN Code Quality Audit",
+        role: "React, Node & MongoDB Evaluation",
+        badge: "PRODUCTION READY"
+      },
+      {
+        stars: "★★★★★",
+        quote: "Rare blend of full-stack web engineering and Python analytical rigor (Pandas, NumPy, Scikit-Learn) backed by an 8.36 CGPA in BCA.",
+        author: "Academic & Technical Benchmark",
+        role: "Vijaya College BCA • 2023–2026",
+        badge: "TOP TALENT"
+      }
+    ];
+
+    function createMediaCard(item, showProgress = false) {
+      const card = document.createElement("article");
+      card.className = "media-card";
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", `Open details for ${item.title}`);
+
+      const progressHTML = showProgress
+        ? `
+          <div class="progress-wrapper">
+            <div class="progress-label">
+              <span>${item.progressText}</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: ${item.progress}%"></div>
+            </div>
+          </div>
+        `
+        : "";
+
+      card.innerHTML = `
+        <div class="card-thumb">
+          <img src="${item.image}" alt="${item.title}" loading="lazy" />
+          <div class="card-thumb-overlay"></div>
+          <span class="card-top-badge">${item.badge}</span>
+          <h3 class="card-title-overlay">${item.title}</h3>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="card-match">${item.match}</span>
+            <span class="card-year">${item.year}</span>
+          </div>
+          ${progressHTML}
+          <p class="card-desc">${item.shortDesc}</p>
+          <div class="card-tags">
+            ${item.tags.map(t => `<span class="tag-pill">${t}</span>`).join("")}
+          </div>
+          <div class="card-hover-cta">
+            <span class="btn-view-project">▶ View Project</span>
+            <span class="btn-circle-icon" aria-hidden="true">+</span>
+          </div>
+        </div>
+      `;
+
+      card.addEventListener("click", () => openItemModal(item));
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openItemModal(item);
+        }
+      });
+
+      return card;
+    }
+
+    function renderAllRows() {
+      const trendingTrack = document.getElementById("track-trending");
+      TRENDING_PROJECTS.forEach(p => trendingTrack.appendChild(createMediaCard(p, false)));
+
+      const continueTrack = document.getElementById("track-continue");
+      CONTINUE_WATCHING.forEach(c => continueTrack.appendChild(createMediaCard(c, true)));
+
+      const skillsTrack = document.getElementById("track-skills");
+      TOP_10_SKILLS.forEach(skill => {
+        const el = document.createElement("article");
+        el.className = "top10-card";
+        el.setAttribute("tabindex", "0");
+        el.innerHTML = `
+          <div class="top10-rank" aria-hidden="true">${skill.rank}</div>
+          <div class="top10-poster">
+            <span class="skill-cat">#${skill.rank} • ${skill.category}</span>
+            <h3 class="skill-name">${skill.name}</h3>
+            <p class="skill-sub">${skill.sub}</p>
+          </div>
+        `;
+        el.addEventListener("click", () => openResumeSummaryModal());
+        skillsTrack.appendChild(el);
+      });
+
+      const winsTrack = document.getElementById("track-wins");
+      CLIENT_WINS.forEach(w => winsTrack.appendChild(createMediaCard(w, false)));
+
+      const btsTrack = document.getElementById("track-bts");
+      BEHIND_THE_SCENES.forEach(b => btsTrack.appendChild(createMediaCard(b, false)));
+
+      const reviewsTrack = document.getElementById("track-reviews");
+      CRITICS_REVIEWS.forEach(r => {
+        const card = document.createElement("article");
+        card.className = "review-card";
+        card.innerHTML = `
+          <div>
+            <div class="review-stars" aria-label="5 out of 5 stars">${r.stars}</div>
+            <p class="review-quote" style="margin-top:0.65rem;">“${r.quote}”</p>
+          </div>
+          <div class="review-author">
+            <div>
+              <div class="author-name">${r.author}</div>
+              <div class="author-role">${r.role}</div>
+            </div>
+            <span class="certified-fresh">${r.badge}</span>
+          </div>
+        `;
+        reviewsTrack.appendChild(card);
+      });
+    }
+
+    function selectProfile(profileKey) {
+      const data = VISITOR_PROFILES[profileKey] || VISITOR_PROFILES.recruiter;
+
+      document.getElementById("hero-match").textContent = data.match;
+      document.getElementById("hero-tagline").textContent = data.tagline;
+      document.getElementById("hero-pitch").textContent = data.pitch;
+      document.getElementById("continue-visitor-name").textContent = data.label;
+
+      const miniAvatar = document.getElementById("nav-mini-avatar");
+      miniAvatar.textContent = data.short;
+      miniAvatar.className = `mini-avatar ${data.avatarClass}`;
+      document.getElementById("nav-profile-label").textContent = data.label;
+
+      document.getElementById("profile-gate").classList.add("hidden");
+      sessionStorage.setItem("manoj_portfolio_profile", profileKey);
+    }
+
+    function openProfileGate() {
+      document.getElementById("profile-gate").classList.remove("hidden");
+    }
+
+    function scrollCarousel(trackId, direction) {
+      const track = document.getElementById(trackId);
+      if (!track) return;
+      const scrollAmount = Math.max(track.clientWidth * 0.78, 300);
+      track.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
+    }
+
+    const modalEl = document.getElementById("detail-modal");
+
+    function openItemModal(item) {
+      document.getElementById("modal-img").src = item.image;
+      document.getElementById("modal-img").alt = item.title;
+      document.getElementById("modal-title").textContent = item.title;
+      document.getElementById("modal-match").textContent = item.match;
+      document.getElementById("modal-year").textContent = item.year;
+      document.getElementById("modal-badge").textContent = item.badge;
+      document.getElementById("modal-desc").textContent = item.fullDesc;
+      document.getElementById("modal-stack").textContent = item.stack;
+      document.getElementById("modal-role").textContent = item.role;
+      document.getElementById("modal-tags").textContent = item.tags.join(", ");
+
+      const primaryLink = document.getElementById("modal-primary-link");
+      primaryLink.href = item.link || "https://github.com/ManojKumark-creator";
+      primaryLink.textContent = item.link && item.link.includes("linkedin")
+        ? "▶ View on LinkedIn"
+        : "▶ View Code & Details";
+
+      const resultsList = document.getElementById("modal-results");
+      resultsList.innerHTML = item.results.map(r => `<li>${r}</li>`).join("");
+
+      const galleryGrid = document.getElementById("modal-gallery");
+      const gallerySection = document.getElementById("modal-gallery-section");
+      if (item.screenshots && item.screenshots.length) {
+        gallerySection.style.display = "block";
+        galleryGrid.innerHTML = item.screenshots
+          .map((src, idx) => `<img src="${src}" alt="${item.title} preview ${idx + 1}" loading="lazy" />`)
+          .join("");
+      } else {
+        gallerySection.style.display = "none";
+      }
+
+      modalEl.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function openShowreelModal() {
+      openItemModal({
+        title: "MANOJ KUMAR K — Developer Showreel",
+        badge: "2026 REEL",
+        match: "99% Match",
+        year: "Bengaluru",
+        role: "Full-Stack Software Developer",
+        image: "Manoj123.jpeg",
+        tags: ["MERN Stack", "PHP 8 / MySQL", "Python ML", "REST APIs"],
+        fullDesc: "A complete walkthrough of Manoj Kumar K's production engineering work: building 10+ RESTful APIs and centralized Express middleware at Orvionar, architecting MUNCHMATE's normalized PHP 8/MySQL canteen ordering platform, securing a MERN Task Tracker with JWT & bcrypt, and building Python predictive ML pipelines.",
+        results: [
+          "Internship: MERN Full Stack Web Development Intern at Orvionar (Jan–Apr 2026, 13-week agile cycle).",
+          "Education: Bachelor of Computer Applications (BCA) at Vijaya College, Jayanagar (2023–2026) — 8.36 CGPA.",
+          "Contact: +91-7090077384 | manojkumark654007@gmail.com | github.com/ManojKumark-creator"
+        ],
+        stack: "React.js, Node.js, Express.js, MongoDB, PHP 8, MySQL, Python, Pandas, Scikit-Learn",
+        link: "https://github.com/ManojKumark-creator",
+        screenshots: [
+          "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&w=800&q=80"
+        ]
+      });
+    }
+
+    function openResumeSummaryModal() {
+      openItemModal({
+        title: "MANOJ KUMAR K — Complete Resume Dossier",
+        badge: "RESUME VERIFIED",
+        match: "100% Match",
+        year: "2023–2026",
+        role: "Full-Stack Software Developer • Bengaluru",
+        image: "Manoj123.jpeg",
+        tags: ["BCA 8.36 CGPA", "Orvionar Intern", "MERN", "PHP/MySQL", "Python"],
+        fullDesc: "Results-driven BCA graduate and Full-Stack Software Developer with hands-on internship experience building scalable web applications using the MERN stack, PHP, MySQL, and Python. Proven track record of shipping end-to-end applications featuring RESTful APIs, JWT authentication, and relational database architecture.",
+        results: [
+          "EDUCATION: BCA — Vijaya College, Jayanagar, Bengaluru (2023–2026) | CGPA: 8.36. Pre-University (PCMB) — B.E.S. PU College, Bengaluru (2023) | 70%.",
+          "INTERNSHIP: MERN Full Stack Web Development Intern at Orvionar, Bengaluru (Jan 2026 – Apr 2026) — 10+ REST APIs, custom Express middleware, React UI.",
+          "LANGUAGES & TOOLS: Python, JavaScript (ES6+), Java, PHP 8, SQL, C++, C, HTML5, CSS3, React, Node/Express, MongoDB, Mongoose, Pandas, NumPy, Scikit-Learn, Git/GitHub."
+        ],
+        stack: "MERN Stack, PHP 8, MySQL, Python Data Science Stack, Java, C++, Git, VS Code, Android Studio",
+        link: "https://www.linkedin.com/in/manojkumark654007",
+        screenshots: [
+          "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=800&q=80"
+        ]
+      });
+    }
+
+    function closeModal() {
+      modalEl.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    function handleBackdropClick(event) {
+      if (event.target === modalEl) {
+        closeModal();
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modalEl.classList.contains("open")) {
+        closeModal();
+      }
+    });
+
+    window.addEventListener("scroll", () => {
+      const nav = document.getElementById("navbar");
+      if (window.scrollY > 40) {
+        nav.classList.add("scrolled");
+      } else {
+        nav.classList.remove("scrolled");
+      }
+    });
+
+    const mobileBtn = document.getElementById("mobile-menu-btn");
+    const navLinksEl = document.getElementById("nav-links");
+    mobileBtn.addEventListener("click", () => {
+      const isOpen = navLinksEl.classList.toggle("mobile-open");
+      mobileBtn.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    navLinksEl.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        navLinksEl.classList.remove("mobile-open");
+        mobileBtn.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    renderAllRows();
+  </script>
+</body>
+</html>
